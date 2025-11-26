@@ -1,0 +1,399 @@
+/* Global Reset & Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body.payment-body {
+    background-color: #f4f5f7;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Container */
+.pay-container {
+    max-width: 900px;
+    width: 100%;
+    background: transparent;
+}
+
+/* Header */
+.pay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.brand-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-small {
+    width: 36px;
+    height: 36px;
+    background: #111;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.pay-header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #000;
+}
+
+/* Main Card */
+.pay-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+.pay-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+}
+
+/* --- Left Column (Payment & Address) --- */
+.pay-col-left {
+    padding: 40px;
+    border-right: 1px solid #eee;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* QR Section */
+.qr-section {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.qr-title {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.qr-box {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.qr-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Action Bar (Amount + Pay Button) */
+.action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 24px;
+}
+
+.amount-box {
+    display: flex;
+    align-items: baseline;
+    color: #111;
+}
+
+.currency {
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 2px;
+}
+
+.amt-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.btn-pay-now {
+    background-color: #111;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.btn-pay-now:hover {
+    background-color: #333;
+}
+
+.icon-arrow {
+    font-size: 16px;
+}
+
+/* Section Divider */
+.section-divider {
+    height: 1px;
+    background: #eee;
+    margin: 0 0 24px 0;
+}
+
+/* Address Section */
+.address-section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #111;
+}
+
+.sub-text {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.input-group {
+    margin-bottom: 16px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.classic-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    background: #fff;
+}
+
+.classic-input:focus {
+    outline: none;
+    border-color: #111;
+}
+
+.row-split {
+    display: flex;
+    gap: 12px;
+}
+
+.row-split .input-group {
+    flex: 1;
+}
+
+/* Alternative Details (Small text at bottom left) */
+.alt-payment-details {
+    margin-top: auto;
+    background: #fafafa;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #555;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.text-btn {
+    background: none;
+    border: none;
+    color: #0066cc;
+    cursor: pointer;
+    font-size: 11px;
+    text-decoration: underline;
+}
+
+/* --- Right Column (Verification) --- */
+.pay-col-right {
+    padding: 40px;
+    background-color: #fafbfc;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.icon-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.icon-img {
+    width: 18px;
+    height: 18px;
+}
+
+.crypto-row {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-secondary {
+    padding: 0 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* File Upload Styling */
+.upload-group {
+    flex-grow: 1;
+}
+
+.file-drop-area {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    background: #fff;
+}
+
+.file-drop-area:hover {
+    border-color: #aaa;
+}
+
+.file-msg {
+    font-size: 14px;
+    color: #666;
+}
+
+.file-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.note-text {
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* UTR Submit */
+.large-input {
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.btn-submit-utr {
+    width: 100%;
+    padding: 14px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-submit-utr:hover {
+    background-color: #0052a3;
+}
+
+/* Toast Notification */
+.toast-msg {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: white;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, 10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .pay-grid {
+        grid-template-columns: 1fr;
+    }
+    .pay-col-left {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+}

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Payment — Fresh Mart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+      /* --- FRESH MART PAYMENT THEME --- */
+      :root {
+          --bg: #f0fdf4;         /* Light Green Bg */
+          --card: #ffffff;
+          --text: #064e3b;       /* Dark Green Text */
+          --accent: #15803d;     /* Deep Green */
+          --accent-bright: #16a34a; /* Bright Green */
+          --border: #dcfce7;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+      body {
+          background-color: var(--bg);
+          color: var(--text);
+          display: flex; justify-content: center; min-height: 100vh; padding: 20px;
+      }
+
+      .pay-container { max-width: 900px; width: 100%; }
+
+      /* Header */
+      .pay-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+      .brand-wrapper { display: flex; align-items: center; gap: 10px; }
+      .logo-small { 
+          width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+          color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px;
+      }
+      h1 { font-size: 20px; font-weight: 700; color: var(--text); }
+      .back-link { text-decoration: none; color: #64748b; font-size: 14px; font-weight: 500; }
+
+      /* Main Card */
+      .pay-card {
+          background: var(--card); border-radius: 16px;
+          box-shadow: 0 10px 30px rgba(22, 163, 74, 0.08);
+          border: 1px solid var(--border);
+          overflow: hidden;
+          display: grid; grid-template-columns: 1fr 1fr;
+      }
+
+      /* Left Column */
+      .pay-col-left { padding: 30px; border-right: 1px solid #f0fdf4; }
+
+      .amount-box { margin-bottom: 24px; }
+      .label-sm { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+      .amt-value { font-size: 32px; font-weight: 800; color: var(--accent); }
+
+      .input-group { margin-bottom: 16px; }
+      .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+      .classic-input {
+          width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;
+          font-size: 14px; outline: none; transition: border 0.2s;
+      }
+      .classic-input:focus { border-color: var(--accent-bright); }
+      
+      .row-split { display: flex; gap: 12px; }
+      .row-split .input-group { flex: 1; }
+
+      /* Pay Button */
+      .btn-pay-now {
+          background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+          color: white; border: none; width: 100%; padding: 14px;
+          border-radius: 8px; font-weight: 700; font-size: 16px;
+          cursor: pointer; margin-top: 10px; display: flex; justify-content: center; gap: 8px;
+          transition: transform 0.2s;
+      }
+      .btn-pay-now:active { transform: scale(0.98); }
+
+      /* Right Column (Initially Hidden) */
+      .pay-col-right { 
+          padding: 30px; background-color: #fcfdfc; 
+          display: flex; flex-direction: column; gap: 20px;
+          opacity: 0.5; pointer-events: none; /* Locked State */
+          filter: blur(2px); transition: all 0.3s;
+      }
+      
+      /* Active State for Right Column */
+      .pay-col-right.active {
+          opacity: 1; pointer-events: auto; filter: none; background-color: #fff;
+      }
+
+      .qr-section { text-align: center; }
+      .qr-box { 
+          width: 180px; height: 180px; margin: 0 auto 12px; 
+          border: 1px dashed var(--accent); border-radius: 12px; padding: 8px; 
+      }
+      .qr-img { width: 100%; height: 100%; object-fit: contain; }
+
+      .bank-details { background: #f0fdf4; padding: 12px; border-radius: 8px; font-size: 12px; color: var(--text); }
+      .detail-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+      .copy-text { color: var(--accent); cursor: pointer; font-weight: 700; }
+
+      .btn-submit-utr {
+          background: #0f172a; color: white; border: none; width: 100%; padding: 14px;
+          border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: auto;
+      }
+
+      /* Mobile */
+      @media (max-width: 768px) {
+          .pay-card { grid-template-columns: 1fr; }
+          .pay-col-left { border-right: none; border-bottom: 1px solid #f0fdf4; }
+          .pay-col-right { border-top: 1px solid #eee; }
+      }
+  </style>
+</head>
+<body class="payment-body">
+
+  <div class="pay-container">
+    <header class="pay-header">
+      <div class="brand-wrapper">
+        <div class="logo-small">FM</div>
+        <h1>Fresh Mart Checkout</h1>
+      </div>
+      <a href="index.html" class="back-link">Cancel</a>
+    </header>
+
+    <div class="pay-card">
+      
+      <div class="pay-col-left">
+          <div class="amount-box">
+              <div class="label-sm">Total Payable Amount</div>
+              <div class="amt-value">₹<span id="payAmountDisplay">0</span></div>
+          </div>
+
+          <div class="form-section">
+            <h3 style="font-size:16px; margin-bottom:12px; color:var(--text);">Shipping Address</h3>
+            
+            <div class="input-group">
+                <label>Village / Area</label>
+                <input type="text" id="addrVill" class="classic-input" placeholder="e.g. Gandhi Nagar">
+            </div>
+            
+            <div class="row-split">
+                <div class="input-group">
+                    <label>City</label>
+                    <input type="text" id="addrCity" class="classic-input" placeholder="City">
+                </div>
+                <div class="input-group">
+                    <label>Pincode</label>
+                    <input type="number" id="addrPin" class="classic-input" placeholder="000000">
+                </div>
+            </div>
+
+            <button id="btnPayNow" class="btn-pay-now">
+                Confirm & Pay Now →
+            </button>
+            <div style="text-align:center; font-size:11px; color:#94a3b8; margin-top:8px">
+                Clicking this will open your UPI App
+            </div>
+          </div>
+      </div>
+
+      <div class="pay-col-right" id="verificationSection">
+          
+          <div class="qr-section">
+            <div class="label-sm">Scan QR or Use UPI</div>
+            <div class="qr-box">
+                <img src="images/icons/qr-code.jpg" onerror="this.src='https://placehold.co/200x200?text=QR+Code'" class="qr-img">
+            </div>
+          </div>
+
+          <div class="bank-details">
+            <div class="detail-row">
+                <span>UPI: yatasiddhartha33@okicici</span>
+                <span class="copy-text" onclick="window.copyToClip('yatasiddhartha33@okicici')">COPY</span>
+            </div>
+            <div class="detail-row">
+                <span>Airtel Bank: 9951900570</span>
+                <span class="copy-text" onclick="window.copyToClip('9951900570')">COPY</span>
+            </div>
+            <div class="detail-row"><span>IFSC: AIRP0000001</span></div>
+          </div>
+
+          <div class="input-group" style="margin-top:20px;">
+              <label>Enter UTR / Transaction ID (Required)</label>
+              <input type="text" placeholder="12-digit Ref No." class="classic-input" id="utrInput" style="font-size:16px; letter-spacing:1px; border-color:#94a3b8">
+          </div>
+
+          <button class="btn-submit-utr" id="submitUtrBtn">Submit Order</button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+      import { db, ref, push, set } from "./firebase-init.js";
+
+      // 0. Setup
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('amount') || '0';
+      document.getElementById('payAmountDisplay').innerText = amount;
+      
+      const verifSection = document.getElementById('verificationSection');
+
+      // 1. PAY NOW BUTTON (Validation + Unlock + UPI Link)
+      document.getElementById('btnPayNow').addEventListener('click', function() {
+          const vill = document.getElementById('addrVill').value.trim();
+          const city = document.getElementById('addrCity').value.trim();
+          const pin = document.getElementById('addrPin').value.trim();
+
+          if (!vill || !city || !pin) {
+              alert("❌ Please fill the complete address first!");
+              return;
+          }
+
+          // A. Unlock the Right Side
+          verifSection.classList.add('active');
+          
+          // B. Construct UPI Deep Link
+          const upiID = "yatasiddhartha33@okicici";
+          const name = "Fresh Mart";
+          // Properly encoded UPI link
+          const upiLink = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+          
+          // C. Try to open UPI app
+          window.location.href = upiLink;
+
+          // D. Visual Feedback
+          this.innerHTML = "✅ Address Saved. Waiting for Payment...";
+          this.style.background = "#059669"; // Darker Green
+          this.disabled = true; // Prevent double clicking
+          
+          // Scroll to UTR section on mobile so they see it
+          if(window.innerWidth < 768) {
+              setTimeout(() => {
+                  verifSection.scrollIntoView({behavior: "smooth"});
+              }, 1000);
+          }
+      });
+
+      // 2. COPY FUNCTION
+      window.copyToClip = function(text) {
+          navigator.clipboard.writeText(text).then(() => {
+              alert("Copied!"); 
+          });
+      }
+
+      // 3. SUBMIT ORDER TO FIREBASE
+      const utrBtn = document.getElementById('submitUtrBtn');
+      
+      utrBtn.addEventListener('click', async () => {
+          const utrVal = document.getElementById('utrInput').value.trim();
+          if(!utrVal || utrVal.length < 4){
+              alert("Please enter the correct UTR / Reference Number.");
+              return;
+          }
+
+          // Get Data
+          const rawCart = localStorage.getItem('rl_cart');
+          const cartObj = rawCart ? JSON.parse(rawCart) : {};
+          let itemNames = [];
+          for (let key in cartObj) {
+              const item = cartObj[key];
+              itemNames.push(`${item.title} (${item.qty})`);
+          }
+          const itemsString = itemNames.join(', ') || "Unknown Items";
+          const userEmail = localStorage.getItem('rl_user_email') || "Guest";
+          const addr = document.getElementById('addrVill').value + ", " + document.getElementById('addrCity').value;
+
+          utrBtn.innerText = 'Verifying...';
+          
+          try {
+              // Send to Firebase
+              const newOrderRef = push(ref(db, 'orders'));
+              await set(newOrderRef, {
+                  amount: amount,
+                  items: itemsString,
+                  txId: utrVal,
+                  status: "Processing",
+                  userEmail: userEmail,
+                  address: addr,
+                  date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()
+              });
+
+              // Success
+              localStorage.removeItem('rl_cart');
+              alert("🎉 Order Placed! Our team will verify it shortly.");
+              window.location.href = "userprofile.html"; 
+
+          } catch (error) {
+              console.error(error);
+              alert("Error: " + error.message);
+              utrBtn.innerText = 'Try Again';
+          }
+      });
+  </script>
+</body>
+</html>

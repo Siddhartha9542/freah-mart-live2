@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Fresh Mart</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <div class="container">
+        <div id="login-box">
+            <h2>Welcome Back</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="you@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-pass">Password</label>
+                    <input type="password" id="login-pass" placeholder="Enter your password" required>
+                </div>
+                <p id="login-error" class="error-msg">Invalid email or password.</p>
+                <button type="submit" id="btnLogin">Login</button>
+            </form>
+            <p class="toggle-link">
+                Don't have an account? <span onclick="toggleForms()">Sign Up</span>
+            </p>
+        </div>
+
+        <div id="signup-box" class="hidden">
+            <h2>Create Account</h2>
+            <form id="signupForm">
+                <div class="input-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="John Doe" required>
+                </div>
+                <div class="input-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="you@gmail.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="signup-pass">Create Password</label>
+                    <input type="password" id="signup-pass" placeholder="Minimum 6 chars" required>
+                </div>
+                <button type="submit" id="btnSignup">Sign Up</button>
+            </form>
+            <p class="toggle-link">
+                Already have an account? <span onclick="toggleForms()">Login</span>
+            </p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "./firebase-init.js";
+
+        // 1. Toggle between Login/Signup
+        window.toggleForms = function() {
+            const loginBox = document.getElementById('login-box');
+            const signupBox = document.getElementById('signup-box');
+            
+            if (loginBox.classList.contains('hidden')) {
+                loginBox.classList.remove('hidden');
+                signupBox.classList.add('hidden');
+            } else {
+                loginBox.classList.add('hidden');
+                signupBox.classList.remove('hidden');
+            }
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        // 2. LOGIN LOGIC
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
+            const btn = document.getElementById('btnLogin');
+            const errorMsg = document.getElementById('login-error');
+
+            btn.innerText = "Verifying...";
+            btn.style.opacity = "0.7";
+            errorMsg.style.display = 'none';
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+
+                console.log("Login Success:", user.email);
+                
+                // ADMIN CHECK
+                if(email === "admin@gmail.com") {
+                    localStorage.setItem('rl_role', 'admin');
+                    window.location.href = "admin.html";
+                } else {
+                    localStorage.setItem('rl_role', 'user');
+                    localStorage.setItem('rl_user_email', email);
+                    window.location.href = "index.html";
+                }
+
+            } catch (error) {
+                console.error(error);
+                btn.innerText = "Login";
+                btn.style.opacity = "1";
+                errorMsg.innerText = "Error: " + error.message.replace("Firebase: ", "");
+                errorMsg.style.display = 'block';
+            }
+        });
+
+        // 3. SIGNUP LOGIC (With Email Validation)
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signup-email').value.trim();
+            const pass = document.getElementById('signup-pass').value.trim();
+            const btn = document.getElementById('btnSignup');
+
+            // VALIDATION 1: Must be Gmail
+            if (!email.toLowerCase().endsWith("@gmail.com")) {
+                alert("Please use a valid @gmail.com email address.");
+                return;
+            }
+
+            // VALIDATION 2: Password Length
+            if(pass.length < 6) {
+                alert("Password must be at least 6 characters");
+                return;
+            }
+
+            btn.innerText = "Creating Account...";
+            btn.style.opacity = "0.7";
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                
+                alert("Account Created Successfully! Logging you in...");
+                
+                localStorage.setItem('rl_role', 'user');
+                localStorage.setItem('rl_user_email', email);
+                window.location.href = "index.html";
+
+            } catch (error) {
+                console.error(error);
+                btn.innerText = "Sign Up";
+                btn.style.opacity = "1";
+                alert("Signup Failed: " + error.message.replace("Firebase: ", ""));
+            }
+        });
+    </script>
+</body>
+</html>

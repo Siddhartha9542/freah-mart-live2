@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Fresh Mart — Grocery Delivery</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <script>
+      if(!localStorage.getItem('rl_role')) {
+          window.location.href = 'login.html';
+      }
+  </script>
+
+  <style>
+    /* Profile Button Style */
+    .profile-link {
+      display: flex; align-items: center; justify-content: center;
+      color: #15803d; /* Green Text */
+      text-decoration: none; margin-left: 12px; padding: 6px;
+      border-radius: 50%; transition: background-color 0.2s;
+      background: #dcfce7; /* Light Green Bg */
+    }
+    .profile-link:hover { background-color: #bbf7d0; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo" style="background: linear-gradient(135deg, #15803d, #16a34a);">FM</div>
+        <div>
+          <h1>Fresh Mart</h1>
+          <p class="lead">Groceries in 10 mins</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search" role="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="q" placeholder="Search milk, rice, chips..." />
+        </div>
+        
+        <a href="userprofile.html" class="profile-link" aria-label="User Profile">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+        </div>
+    </header>
+
+    <main>
+      <div class="topline">
+        <span class="pill">⚡ Instant Delivery</span>
+        <div class="muted">Delivering to: <span style="font-weight:700; color:#15803d">Home</span></div>
+      </div>
+
+      <section class="products" id="products" aria-live="polite"></section>
+      
+      <div class="hint">Tip: Click a category to see items inside.</div>
+    </main>
+
+    <aside class="cart" aria-label="Cart">
+      <h3>Your Basket <span id="count" class="muted" style="float:right">0 items</span></h3>
+      <div class="cart-list" id="cartList"></div>
+      <div class="cart-check">
+        <div>
+          <div class="muted">To Pay</div>
+          <div id="total" style="font-weight:800; font-size: 1.2rem; color:#15803d">₹0</div>
+        </div>
+        <div class="action-row">
+            <button class="checkout" id="checkoutBtn" onclick="document.getElementById('directPayBtn').click()">Checkout</button>
+            <button class="pay-btn-main" id="directPayBtn">
+                <span>Pay Now</span>
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <aside id="subPanel" class="sub-panel" aria-hidden="true">
+    <h4 id="subTitle">Category</h4>
+    <div id="subList" class="sub-list"></div>
+    <div style="text-align:right;margin-top:8px"><button class="ghost" id="closeSub">Close</button></div>
+  </aside>
+
+  <div id="toasts"></div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-col col-brand">
+        <div class="footer-tag" style="font-size: 20px; font-weight:800; color:#15803d">Fresh Mart</div>
+        <div class="footer-tag">Quality you can trust</div>
+        <div class="footer-contact">
+          <div>Phone: <a href="tel:+919640163509">+91 96401 63509</a></div>
+          <div>Email: <a href="mailto:support@freshmart.com">support@freshmart.com</a></div>
+        </div>
+      </div>
+
+      <nav class="footer-col col-links" aria-label="Store categories">
+        <div class="col-title">Aisles</div>
+        <ul>
+          <li><a href="#" onclick="return false">Vegetables & Fruits</a></li>
+          <li><a href="#" onclick="return false">Dairy & Breakfast</a></li>
+          <li><a href="#" onclick="return false">Rice, Atta & Dals</a></li>
+          <li><a href="#" onclick="return false">Masalas & Spices</a></li>
+          <li><a href="#" onclick="return false">Snacks & Munchies</a></li>
+          <li><a href="#" onclick="return false">Cold Drinks</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-col col-help">
+        <div class="col-title">Customer Care</div>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col col-cta">
+        <div class="col-title">Stay updated</div>
+        <p class="muted">Subscribe for offers & updates</p>
+        <form id="newsletter" aria-label="subscribe to newsletter" onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+          <input id="newsletterEmail" type="email" placeholder="you@example.com" required>
+          <button type="submit" class="btn-sub">Subscribe</button>
+        </form>
+        <div class="socials">
+          <a href="#" class="social" aria-label="facebook"><img src="images/icons/ss-facebook.svg" alt="facebook" onerror="this.style.display='none'"/></a>
+          <a href="#" class="social" aria-label="instagram"><img src="images/icons/ss-instagram.svg" alt="instagram" onerror="this.style.display='none'"/></a>
+          <a href="#" class="social" aria-label="x"><img src="images/icons/ss-x.svg" alt="x" onerror="this.style.display='none'"/></a>
+          <a href="#" class="social" aria-label="whatsapp"><img src="images/icons/ss-whatsapp.svg" alt="whatsapp" onerror="this.style.display='none'"/></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="legal">© <span id="year"></span> Fresh Mart Grocery — All rights reserved.</div>
+      <div class="payments">
+        <img src="images/pay-visa.png" alt="visa" onerror="this.style.display='none'"/>
+        <img src="images/pay-mastercard.png" alt="mastercard" onerror="this.style.display='none'"/>
+        <img src="images/pay-upi.png" alt="upi" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
